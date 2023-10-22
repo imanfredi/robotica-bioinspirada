@@ -22,6 +22,7 @@ void Car::stop()
 {
     this->motorLeft.stop();
     this->motorRight.stop();
+    this->setSpeed(0);
 }
 
 void Car::goForwards()
