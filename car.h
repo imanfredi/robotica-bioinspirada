@@ -16,6 +16,7 @@ private:
 public:
     Car(Motor motorLeft, Motor motorRight);
     void setSpeed(int speed);
+    int getSpeed();
     void stop();
     void goForwards();
     void goBackwards();

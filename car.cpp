@@ -1,5 +1,5 @@
 #include "Car.h"
-  
+
 Car::Car(Motor motorLeft, Motor motorRight)
     : motorLeft(motorLeft), motorRight(motorRight)
 {
@@ -11,6 +11,11 @@ void Car::setSpeed(int speed)
     this->speed = speed;
     this->motorLeft.setSpeed(this->speed);
     this->motorRight.setSpeed(this->speed);
+}
+
+int Car::getSpeed()
+{
+    return this->speed;
 }
 
 void Car::stop()
