@@ -18,6 +18,9 @@ int echoPin = 12;
 
 int distanceThreshold = 20;
 
+long previousMillis = 0;
+long interval = 1000;
+
 Motor motorLeft(enA, inBackwardA, inForwardA);
 Motor motorRight(enB, inBackwardB, inForwardB);
 Ultrasonic ultrasonic(trigPin, echoPin);
@@ -33,15 +36,20 @@ void setup()
 
 void loop()
 {
-
+    long currentMillis = millis();
     float distance = ultrasonic.getDistance();
 
-    if (distance > distanceThreshold && car.getSpeed != 100)
+    if (currentMillis - previousMillis >= interval)
     {
-        car.setSpeed(100);
-    }
-    else if (distance <= distanceThreshold)
-    {
-        car.stop();
+        previousMillis = currentMillis;
+
+        if (distance > distanceThreshold && car.getSpeed != 100)
+        {
+            car.setSpeed(100);
+        }
+        else if (distance <= distanceThreshold)
+        {
+            car.stop();
+        }
     }
 }

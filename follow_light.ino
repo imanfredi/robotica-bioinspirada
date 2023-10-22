@@ -24,6 +24,9 @@ int echoPin = 12;
 int distanceThreshold = 20;
 int lightThreshold = 100;
 
+long previousMillis = 0;
+long interval = 1000;
+
 Motor motorLeft(enA, inBackwardA, inForwardA);
 Motor motorRight(enB, inBackwardB, inForwardB);
 Ultrasonic ultrasonic(trigPin, echoPin);
@@ -42,37 +45,43 @@ void setup()
 void loop()
 {
 
+    long currentMillis = millis();
     float distance = ultrasonic.getDistance();
     int lightRight = lightSensorRight.getLight();
     int lightLeft = lightSensorLeft.getLight();
 
-    if (distance < distanceThreshold)
+    if (currentMillis - previousMillis >= interval)
     {
-        car.stop();
-    }
-    else
-    {
-        int lightDifference = lightLeft - lightRight;
+        previousMillis = currentMillis;
 
-        if (abs(lightDifference) < lightThreshold)
+        if (distance < distanceThreshold)
         {
-            // Both sensors detect similar light levels, move forward
-            car.goForwards();
-            car.setSpeed(100);
-        }
-        else if (lightDifference > 0)
-        {
-            // Left sensor detects more light, turn right
             car.stop();
-            car.turnRight();
-            ccar.setSpeed(100);
         }
         else
         {
-            // Right sensor detects more light, turn left
-            car.stop();
-            car.turnLeft();
-            ccar.setSpeed(100);
+            int lightDifference = lightLeft - lightRight;
+
+            if (abs(lightDifference) < lightThreshold)
+            {
+                // Both sensors detect similar light levels, move forward
+                car.goForwards();
+                car.setSpeed(100);
+            }
+            else if (lightDifference > 0)
+            {
+                // Left sensor detects more light, turn right
+                car.stop();
+                car.turnRight();
+                car.setSpeed(100);
+            }
+            else
+            {
+                // Right sensor detects more light, turn left
+                car.stop();
+                car.turnLeft();
+                car.setSpeed(100);
+            }
         }
     }
 }
